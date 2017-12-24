@@ -1,1 +1,13 @@
 A small example of a calculator written with flex/bison.
+
+Oringinal repository: 
+https://github.com/meyerd/flex-bison-example
+
+Compile the demo: 
+% make
+
+Running the procedure: 
+% ./calc
+
+Clean up the environment:
+% make clean
