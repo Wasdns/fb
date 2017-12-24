@@ -66,7 +66,24 @@ expression: T_INT				{ $$ = $1; }
 %%
 
 int main() {
-	yyin = stdin;
+	int ops = 0;
+
+	printf("Please choose the input way: 0 means using CLI, 1 means using file 'input': ");
+	scanf("%d", &ops);
+
+	if (ops == 0) {
+		// print usage of CLI
+		printf("\nCLI Usage: Input your calculator expression\n");
+		printf("For example: '1+1='\n");
+		printf("Exit the procedure with 'quit' or 'exit'.\n\n");
+
+		yyin = stdin;
+	} else if (ops == 1) {
+		// print info 
+		printf("\nReading input.txt...\n\n");
+		
+		yyin = freopen("input.txt", "r", stdin);
+	}
 
 	do { 
 		yyparse();
@@ -77,5 +94,7 @@ int main() {
 
 void yyerror(const char* s) {
 	fprintf(stderr, "Parse error: %s\n", s);
-	exit(1);
+	// exit the parser program, otherwise the procedure 
+	// would give unexcepted behaviours
+	exit(1); 
 }
