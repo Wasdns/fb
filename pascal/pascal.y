@@ -1,17 +1,8 @@
 %{
 #include "utils.h"
+#include "definitions.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef int bool;
-#define true 1
-#define false 0
-
-extern int yylex();
-extern int yyparse();
-extern FILE* yyin;
-
-void yyerror(const char* s);
 %}
 
 %union {
@@ -25,7 +16,7 @@ void yyerror(const char* s);
 %token<fval> T_FLOAT
 %token<idName> ID
 %token T_PLUS T_MINUS T_MULTIPLY T_DIVIDE T_LEFT T_RIGHT
-%token T_NEWLINE T_QUIT
+%token T_QUIT
 
 %token T_IF T_ELSE T_THEN
 %token T_FOR T_DOWNTO
@@ -106,18 +97,8 @@ factor : ID { $$ = -1; }
 
 %%
 
-int main() {
-	yyin = freopen("example.pas", "r", stdin);
-
-	do { 
-		yyparse();
-	} while(!feof(yyin));
-
-	return 0;
-}
-
 void yyerror(const char* s) {
-	fprintf(stderr, "Parse error: %s\n", s);
+	fprintf(stderr, "Parse error: %s at line %d\n", s, lineno);
 
 	// TBD: show line number
 	// fprintf(stderr, "Parse error: %s in line %d\n", s, line_number);

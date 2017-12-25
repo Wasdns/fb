@@ -2,12 +2,8 @@
 
 %{
 #include "utils.h"
+#include "definitions.h"
 #include <stdio.h>
-
-#define YY_DECL int yylex()
-
-#include "pascal.tab.h"
-
 %}
 
 digit       [0-9]
@@ -15,7 +11,7 @@ letter      [a-zA-Z]
 
 int_num     {digit}+
 real_num    {digit}+"."{digit}*
-identifier  {letter}+({letter}|{digit}|_)*({letter}+|{digit}+)|{letter}+
+identifier  {letter}+({letter}|{digit}|_)*({letter}+|{digit}+)*|{letter}+
 whitespace  [ \t]*
 
 %%
@@ -30,14 +26,10 @@ whitespace  [ \t]*
 "do"                  {return T_DO;}
 "to"                  {return T_TO;}
 "program"             {return T_PROGRAM;}
+"begin"               {return T_BEGIN;}
 "end"                 {return T_END;}
 
-{whitespace}          ; // ignore all whitespace
-{real_num}            {yylval.fval = atof(yytext); return T_FLOAT;}
-{int_num}             {yylval.ival = atoi(yytext); return T_INT;}
-{identifier}          {yylval.idName = copyString(yytext); return ID;}
-
-\n|\r\n|\n\r|\r       {return T_NEWLINE;}
+\n|\r\n|\n\r|\r       {lineno++;}
 "+"	                  {return T_PLUS;}
 "-"	                  {return T_MINUS;}
 "*"	                  {return T_MULTIPLY;}
@@ -52,5 +44,11 @@ whitespace  [ \t]*
 "<"                   {return T_LOWER;}
 "<="                  {return T_NOT_HIGHER;}
 "^"                   {return T_FACT;}
+
+{whitespace}          ; // ignore all whitespace
+{real_num}            {yylval.fval = atof(yytext); return T_FLOAT;}
+{int_num}             {yylval.ival = atoi(yytext); return T_INT;}
+{identifier}          {yylval.idName = copyString(yytext); /*printf("yep %s\n", yylval.idName);*/ return ID;}
+
 
 %%
