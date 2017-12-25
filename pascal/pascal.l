@@ -26,7 +26,9 @@ whitespace  [ \t]*
 "if"                  {return T_IF;}
 "else"                {return T_ELSE;}
 "for"                 {return T_FOR;}
+"then"                {return T_THEN;}
 "do"                  {return T_DO;}
+"to"                  {return T_TO;}
 "program"             {return T_PROGRAM;}
 "end"                 {return T_END;}
 
